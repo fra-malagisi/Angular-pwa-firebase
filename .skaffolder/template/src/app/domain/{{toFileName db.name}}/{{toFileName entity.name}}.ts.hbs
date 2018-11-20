@@ -1,0 +1,50 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "table",
+    "overwrite": true,
+    "_partials": []
+}
+**** END PROPERTIES SKAFFOLDER ****
+import { {{capitalize entity.name}}Base } from './base/{{toFileName entity.name}}.base';
+
+/**
+ * YOU CAN OVERRIDE HERE {{entity.name}}Base.ts
+ */
+export interface {{capitalize entity.name}} extends {{capitalize entity.name}}Base {
+
+    // Insert here your custom attributes and function
+    {{#equal entity.name 'User'}}
+
+    // Functions for User
+
+    token: string;
+
+    // UTILS FUNCTIONS
+
+    /**
+     * Check if logged user is admin
+    isAdmin(): boolean {
+        if (!this.roles)
+            return false;
+        return this.roles.indexOf('ADMIN') === 0;
+    }
+     */
+
+    /**
+     * Check if logged user has one role
+    hasRole(role: string | Array<string>): boolean {
+        if (!this.roles) return false;
+
+        if (typeof role === 'string') {
+            return (this.roles.indexOf(role) !== -1);
+        } else {
+            const found = role.filter(rol => {
+                return (this.roles.indexOf(rol) !== -1);
+            });
+            return found.length > 0;
+        }
+    }
+     */
+
+    {{/equal}}
+}

@@ -1,0 +1,14 @@
+# Docker-compose version
+version: '2'
+
+# Define the services/containers to be run
+services:
+
+  # Service name
+  app: 
+    # directory of Dockerfile
+    build: ./ 
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app/client

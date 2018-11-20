@@ -1,0 +1,57 @@
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
+// Import Services
+{{#eachResource module._services}}
+import { {{capitalize name }}Service } from '../../services/{{toFileName name}}.service';
+{{/eachResource}}
+// Import Models
+import { {{capitalize crudResource.name}} } from '../../domain/{{getDbNameToFileName dbs crudResource._db}}/{{toFileName crudResource.name}}';
+
+// START - USED SERVICES		
+// END - USED SERVICES
+
+/**
+ * This component shows a list of {{capitalize crudResource.name}}
+ * @class {{capitalize module.name}}Component
+ */
+@Component({
+    selector: 'app-{{toFileName module.name}}',
+    templateUrl: './{{toFileName module.name}}.component.html',
+    styleUrls: ['./{{toFileName module.name}}.component.css']
+})
+export class {{capitalize module.name}}Component implements OnInit {
+    list: Observable<any[]>;
+    search: any = {};
+    idSelected: string;
+    constructor(
+        {{#eachResource module._services}}
+        private {{lowercase name }}Service: {{capitalize name}}Service,
+        {{/eachResource}} 
+    ) { }
+
+    /**
+     * Init
+     */
+    ngOnInit(): void {
+        this.list = this.{{lowercase crudResource.name}}Service.list();
+    }
+
+    /**
+     * Select {{capitalize crudResource.name}} to remove
+     *
+     * @param {string} id Id of the {{capitalize crudResource.name}} to remove
+     */
+    selectId(id: string) {
+        this.idSelected = id;
+    }
+
+    /**
+     * Remove selected {{capitalize crudResource.name}}
+     */
+    deleteItem() {
+        this.{{lowercase crudResource.name}}Service.remove(this.idSelected);
+    }
+
+}

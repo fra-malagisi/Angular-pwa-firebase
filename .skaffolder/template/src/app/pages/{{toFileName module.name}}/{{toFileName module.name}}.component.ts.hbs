@@ -1,0 +1,49 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "module",
+    "overwrite": false,
+    "_partials": [
+        {
+            "template": "{{#notEmpty module._services}}/**{{#each module._services}}\n* {{_resource.name}}Service.{{name}}{{#notEmpty description}}\n*\t@description {{description}}{{/notEmpty}}{{#each _params}}\n*\t@param {{type}} {{name}}{{#notEmpty description}} {{description}}{{/notEmpty}}{{/each}}{{#notEmpty returnType}}\n*\t@returns {{returnType}}{{/notEmpty}}\n*{{/each}}\n*/{{/notEmpty}}",
+            "tagTo": "// END - USED SERVICES",
+            "tagFrom": "// START - USED SERVICES",
+            "name": "Partial used service"
+        },
+        {
+            "template": "{{#notEmpty module._resources}}/*{{#each module._resources}}\n * {{name}}Service{{/each}}\n */{{/notEmpty}}",
+            "tagTo": "// END - REQUIRED RESOURCES",
+            "tagFrom": "// START - REQUIRED RESOURCES",
+            "name": "Partial required resources"
+        }
+    ]
+}
+**** END PROPERTIES SKAFFOLDER ****
+// Import Libraries
+import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+
+// Import Services
+{{#eachResource module._services}}
+import { {{capitalize name }}Service } from '../../services/{{toFileName name}}.service';
+{{/eachResource}}
+
+// START - USED SERVICES		
+// END - USED SERVICES
+
+/**
+ * {{module.name}} Component
+ */
+@Component({
+    selector: 'app-{{toFileName module.name}}',
+    templateUrl : './{{toFileName module.name}}.component.html',
+    styleUrls: ['./{{toFileName module.name}}.component.css']
+})
+export class {{#capitalize module.name}}{{/capitalize}}Component {
+
+    constructor({{#eachResource module._services}}
+        private {{lowercase name }}Service: {{capitalize name}}Service,{{/eachResource}}
+        private location: Location
+        ) {
+
+    }
+}

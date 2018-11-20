@@ -1,0 +1,156 @@
+// Import Libraries
+import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+
+// Import Services
+{{#eachResource module._services}}
+import { {{capitalize name }}Service } from '../../services/{{toFileName name}}.service';
+{{/eachResource}}
+
+import { {{capitalize crudResource.name}} } from '../../domain/{{getDbNameToFileName dbs crudResource._db}}/{{toFileName crudResource.name}}';
+{{#each crudResource._relations}}
+{{#equal _ent1._id ../crudResource._entity._id}}
+import { {{capitalize _ent2.name}} } from '../../domain/{{getDbNameToFileName ../dbs _ent2._resource._db}}/{{toFileName _ent2._resource.name}}';
+{{/equal}}
+{{#notEqual _ent1._id ../crudResource._entity._id}}
+import { {{#capitalize _ent1.name}}{{/capitalize}} } from '../../domain/{{getDbNameToFileName ../dbs _ent2._resource._db}}/{{toFileName _ent1._resource.name}}';
+{{/notEqual}}
+{{/each}}
+
+// START - USED SERVICES		
+// END - USED SERVICES
+
+/**
+ * This component allows to edit a  {{capitalize crudResource.name}}
+ */
+@Component({
+    selector: 'app-{{toFileName module.name}}',
+    templateUrl: '{{toFileName module.name}}.component.html',
+    styleUrls: ['{{toFileName module.name}}.component.css']
+})
+export class {{capitalize module.name}}Component implements OnInit {
+    item: any = {};
+    itemDoc: AngularFirestoreDocument<{{capitalize crudResource.name}}>;
+    isNew: Boolean = true;
+    formValid: Boolean;
+
+    {{#each crudResource._relations}}
+    list{{capitalize name}}: {{capitalize _ent2.name}}[];
+    {{/each}}
+
+    {{#each crudResource._relations}}
+    {{#notEqual _ent1._id ../crudResource._entity._id}}
+    external{{capitalize _ent1.name}}: {{capitalize _ent1.name}}[];
+    {{/notEqual}}
+    {{/each}}
+
+    constructor(
+        {{#eachResource module._services}}
+        private {{lowercase name }}Service: {{capitalize name}}Service,
+        {{/eachResource}}
+        private route: ActivatedRoute,
+        private location: Location) {
+        // Init list
+        {{#each crudResource._relations}}
+        {{#notEqual _ent1._id ../crudResource._entity._id}}
+        this.external{{capitalize _ent1.name}} = [];
+        {{/notEqual}}
+        {{/each}}
+    }
+
+    /**
+     * Init
+     */
+    ngOnInit() {
+        this.route.params.subscribe(param => {
+            const id: string = param['id'];
+            if (id !== 'new') {
+                this.isNew = false;
+                this.itemDoc = this.{{lowercase crudResource.name}}Service.get(id);
+                this.itemDoc.valueChanges().subscribe(item => this.item = item);
+
+                {{#each crudResource._relations}}
+                {{#notEqual _ent1._id ../crudResource._entity._id}}
+                this.{{lowercase _ent1.name}}Service.findBy{{capitalize name}}(id).subscribe(list => this.external{{#capitalize _ent1.name}}{{/capitalize}} = list);
+                {{/notEqual}}
+                {{/each}}
+            }
+            // Get relations
+           {{#each crudResource._relations}}
+            {{#equal _ent1._id ../crudResource._entity._id}}
+            this.{{lowercase _ent2.name}}Service.list().subscribe(list => this.list{{#capitalize name}}{{/capitalize}} = list);
+            {{/equal}}
+            {{/each}}
+        });
+    }
+
+
+    {{#each crudResource._relations}}
+    {{#equal _ent1._id ../crudResource._entity._id}}
+    {{#equal type 'm:m'}}
+    /**
+     * Check if an {{capitalize _ent2.name}} is in {{capitalize crudResource.name}} {{name}}
+     *
+     * @param {string} id Id of {{capitalize _ent2.name}} to search
+     * @returns {boolean} True if it is found
+     */
+    contain{{capitalize _ent2.name}}(id: string): boolean {
+        if (!this.item.{{name}}) return false;
+        return this.item.{{name}}.indexOf(id) !== -1;
+    }
+
+    /**
+     * Add {{capitalize _ent2.name}} from {{capitalize ../crudResource.name}}
+     *
+     * @param {string} id Id of {{capitalize _ent2.name}} to add in this.item.{{name}} array
+     */
+    add{{capitalize _ent2.name}}(id: string) {
+        if (!this.item.{{name}})
+            this.item.{{name}} = [];
+        this.item.{{name}}.push(id);
+    }
+
+    /**
+     * Remove an {{capitalize _ent2.name}} from a {{capitalize ../crudResource.name}}
+     *
+     * @param {number} index Index of {{capitalize _ent2.name}} in this.item.{{name}} array
+     */
+    remove{{capitalize _ent2.name}}(index: number) {
+        this.item.{{name}}.splice(index, 1);
+    }
+    {{/equal}}
+    {{/equal}}
+    {{/each}}
+
+    /**
+     * Save {{capitalize crudResource.name}}
+     *
+     * @param {boolean} formValid Form validity check
+     * @param {{{capitalize crudResource.name}}} item {{capitalize crudResource.name}} to save
+     */
+    save(formValid: boolean): void {
+        this.formValid = formValid;
+        if (formValid) {
+            if (this.isNew) {
+                // Create
+                this.{{lowercase crudResource.name}}Service.create(this.item);
+                this.isNew = false;
+            } else {
+                // Update
+                this.{{lowercase crudResource.name}}Service.update(this.itemDoc, this.item);
+            }
+            this.goBack();
+        }
+    }
+
+    /**
+     * Go Back
+     */
+    goBack(): void {
+        this.location.back();
+    }
+
+}

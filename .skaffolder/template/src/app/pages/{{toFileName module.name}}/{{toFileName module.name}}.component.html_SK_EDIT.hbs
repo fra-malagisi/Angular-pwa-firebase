@@ -1,0 +1,115 @@
+<!-- TITLE -->
+<div class="mb-40 mt-40">
+    <h1>{{capitalize crudResource.name}} Edit</h1>
+</div>
+<div class="card mb-40">
+    <div class="card-header">
+        <i class="fa fa-edit"></i> Edit
+    </div>
+    <div class="card-body">
+        <form #editForm="ngForm" [ngClass]="{'was-validated': formValid!=null}">
+            <div class="row justify-content-md-center">
+                <div class="col-md-10">
+                    {{#each crudResource._entity._attrs}}
+                    {{#notEmpty _enum}}
+                    <div class="form-group">
+                        <label for="{{name}}">{{firstUpperCase name}}{{#notEmpty required}} *{{/notEmpty}}</label>
+                        <select name="{{name}}" id="{{name}}" [(ngModel)]="item.{{name}}" class="form-control" #{{name}}="ngModel" {{#notEmpty required}}required{{/notEmpty}}>
+                            <option value=""></option>
+                            {{#each _enum}}
+                            <option value="{{name}}">{{name}}</option>
+                            {{/each}}
+                        </select>{{#notEmpty required}}
+                        <div class="invalid-feedback">Value is required</div>{{/notEmpty}}
+                    </div>
+                    {{/notEmpty}}
+                    {{#isEmptyNull _enum}}
+                    {{#equal type 'Boolean'}}
+                    <div class="form-group ">
+                        <label for="{{name}}">{{firstUpperCase name}}{{#notEmpty required}} *{{/notEmpty}}</label>{{#notEmpty required}}
+                        <input type="checkbox" [(ngModel)]="item.{{name}}" name="{{name}}" {{#notEmpty required}}required{{/notEmpty}}>
+                        <div class="invalid-feedback">Value is required</div>{{/notEmpty}}
+                    </div>
+                    {{/equal}}
+                    {{#notEqual type 'Boolean'}}
+                    <div class="form-group">
+                        <label for="{{name}}">{{firstUpperCase name}}{{#notEmpty required}} *{{/notEmpty}}</label>
+                        <input type="{{#equal type 'Date'}}date{{/equal}}{{#equal type 'Number'}}number{{/equal}}{{#equal type 'Integer'}}number{{/equal}}{{#notEqual type 'Boolean'}}{{#notEqual type 'Integer'}}{{#notEqual type 'Date'}}{{#notEqual type 'Number'}}text{{/notEqual}}{{/notEqual}}{{/notEqual}}{{/notEqual}}" class="form-control" id="{{name}}" [(ngModel)]="item.{{name}}" name="{{name}}" #{{name}}="ngModel" {{#notEmpty required}}required{{/notEmpty}}>{{#notEmpty required}}
+                        <div class="invalid-feedback">Value is required</div>{{/notEmpty}}
+                    </div>
+                    {{/notEqual}}
+                    {{/isEmptyNull}}
+                    {{/each}}
+                    {{#notEmpty crudResource._relations}}
+                    <!-- RELATIONS -->
+                    {{#checkRelation crudResource._relations crudResource._entity}}<h2 class="mb-20">Relations</h2>{{/checkRelation}}
+                    {{/notEmpty}}
+
+                    {{#each crudResource._relations}}
+                    {{#equal _ent1._id ../crudResource._entity._id}}
+                    {{#equal type 'm:m'}}
+                    <div class="pb-30">
+                        <div class="mb-20">
+                            <label>{{firstUpperCase name}}</label>
+
+                            <span class="dropdown ml-20">
+                                <button class="btn btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButton{{name}}" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Add
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{name}}">
+                                    <button class="dropdown-item" *ngFor="let item of list{{capitalize name}}" [class.disabled]="contain{{firstUpperCase _ent2.name}}(item.id)" (click)="$event.preventDefault(); contain{{firstUpperCase _ent2.name}}(item.id) || add{{firstUpperCase _ent2.name}}(item.id)">\{{item.id}}
+                                    </button>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="mb-40">
+                            <ul class="list-group">
+                                <li class="list-group-item" *ngIf="!item.{{lowercase name}} || item.{{lowercase name}}.length == 0">No item found</li>
+                                <li class="list-group-item" *ngFor="let obj of item.{{lowercase name}}; let i = index">
+                                    \{{obj}}
+
+                                    <button class="btn btn-danger pull-right" type="button" (click)="remove{{firstUpperCase _ent2.name}}(i)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {{/equal}}
+                    {{#notEqual type 'm:m'}}
+                    <label for="{{_ent2.name}}">{{firstUpperCase _ent2.name}}</label>
+                    <select name="{{name}}" id="{{name}}" [(ngModel)]="item.{{name}}" class="form-control" #{{name}}="ngModel"  {{#notEmpty required}}required{{/notEmpty}}>
+                        <option *ngFor="let item of list{{capitalize name}}" [value]="item.id">\{{item.id}}</option>
+                    </select>{{#notEmpty required}}
+                        <div class="invalid-feedback">Value is required</div>{{/notEmpty}}
+                    {{/notEqual}}
+                    {{/equal}}
+                    {{/each}}
+
+                    {{#notEmpty crudResource._relations}}
+                    {{#checkExternalRelation crudResource._relations crudResource._entity}}<h2 *ngIf="{{#each crudResource._relations}}{{#notEqual _ent1._id ../crudResource._entity._id}}external{{capitalize _ent1.name}} &&  external{{capitalize _ent1.name}}[0]{{#isNotLastRelations ../crudResource._relations ../crudResource._entity @index}} || {{/isNotLastRelations}}{{/notEqual}}{{/each}}">External Relations</h2>{{/checkExternalRelation}}
+                    {{/notEmpty}}
+        
+                    {{#each crudResource._relations}}
+                            {{#notEqual _ent1._id ../crudResource._entity._id}}
+                        <h3 *ngIf="external{{capitalize _ent1.name}}">{{capitalize _ent1.name}}</h3>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let item of external{{capitalize _ent1.name}}">
+                                <a [routerLink]="[ '/{{lowercase _ent1.name}}s', item.id ]">\{{item.id}}</a>
+                            </li>
+                            <li class="list-group-item" *ngIf="external{{capitalize _ent1.name}}.length==0">No {{lowercase _ent1.name}} found</li>
+                        </ul>
+                            {{/notEqual}}
+                    {{/each}}
+
+                    <!-- BUTTON BAR -->
+                    <div class="mt-40">
+                        <button class="btn btn-primary pull-right" (click)="save(editForm.valid)">Save</button>
+                        <button class="btn btn-secondary pull-right mr-2" (click)="goBack()">Back To List</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

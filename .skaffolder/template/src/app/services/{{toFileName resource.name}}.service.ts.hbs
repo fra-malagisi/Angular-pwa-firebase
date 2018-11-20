@@ -1,0 +1,26 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "resource",
+    "_partials": [
+        {
+            "template": "/**\n * Custom APIs\n{{#notEmpty resource}} *{{#each resource._services}}{{#equal crudAction null}}\n * {{_resource.name}}Service.{{name}}{{#notEmpty description}}\n *\t@description {{description}}{{/notEmpty}}{{#each _params}}\n *\t@param {{type}} {{name}}{{#notEmpty description}} {{description}}{{/notEmpty}}{{/each}}{{#notEmpty returnType}}\n *\t@returns {{returnType}}{{/notEmpty}}\n *{{/equal}}{{/each}}\n */{{/notEmpty}}",
+            "tagTo": "// end documentation",
+            "tagFrom": "// start documentation",
+            "name": "Partial documentation"
+        }
+    ]
+}
+**** END PROPERTIES SKAFFOLDER ****
+// BASE SERVICE
+import { {{capitalize resource.name}}BaseService } from './base/{{toFileName resource.name}}.base.service';
+
+
+// start documentation
+// end documentation
+
+/**
+ * YOU CAN OVERRIDE HERE {{resource.name}}BaseService
+ */
+export class {{capitalize resource.name}}Service extends {{capitalize resource.name}}BaseService {
+
+}

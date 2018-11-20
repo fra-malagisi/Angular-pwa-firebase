@@ -1,0 +1,49 @@
+<!-- TITLE -->
+<div class="mb-40 mt-40">
+    <h1>Actor Edit</h1>
+</div>
+<div class="card mb-40">
+    <div class="card-header">
+        <i class="fa fa-edit"></i> Edit
+    </div>
+    <div class="card-body">
+        <form #editForm="ngForm" [ngClass]="{'was-validated': formValid!=null}">
+            <div class="row justify-content-md-center">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label for="birthDate">BirthDate</label>
+                        <input type="date" class="form-control" id="birthDate" [(ngModel)]="item.birthDate" name="birthDate" #birthDate="ngModel" >
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" class="form-control" id="name" [(ngModel)]="item.name" name="name" #name="ngModel" required>
+                        <div class="invalid-feedback">Value is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" [(ngModel)]="item.surname" name="surname" #surname="ngModel" >
+                    </div>
+                    <!-- RELATIONS -->
+                    
+
+
+                    <h2 *ngIf="externalFilm &&  externalFilm[0]">External Relations</h2>
+        
+                        <h3 *ngIf="externalFilm">Film</h3>
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let item of externalFilm">
+                                <a [routerLink]="[ '/films', item.id ]">{{item.id}}</a>
+                            </li>
+                            <li class="list-group-item" *ngIf="externalFilm.length==0">No film found</li>
+                        </ul>
+
+                    <!-- BUTTON BAR -->
+                    <div class="mt-40">
+                        <button class="btn btn-primary pull-right" (click)="save(editForm.valid)">Save</button>
+                        <button class="btn btn-secondary pull-right mr-2" (click)="goBack()">Back To List</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

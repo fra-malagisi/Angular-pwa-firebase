@@ -1,0 +1,43 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "oneTime",
+    "_partials": [
+        {
+            "template": "{{#each modules}}\n    {{#startsWith 'List_' template}}\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n               <a class=\"nav-link\" routerLink=\"{{lowercase url}}\">{{capitalize _resources.0.name}}</a>\n            </li>\n        \n    {{/startsWith}}\n{{/each}}",
+            "tagTo": "<!-- END LINK MENU -->",
+            "tagFrom": "<!-- START LINK MENU -->",
+            "name": "links partial"
+        }
+    ]
+}
+**** END PROPERTIES SKAFFOLDER ****
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" routerLink="">{{unslug project.name}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div *ngIf="user" class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/home">Home </a>
+            </li>
+            <!-- START LINK MENU -->
+            <!-- END LINK MENU -->
+        </ul>
+    </div>
+    <div *ngIf="user" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Benvenuto \{{user.displayName}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" (click)="authenticationService.logout()">Logout</a>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</nav>

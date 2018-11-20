@@ -1,0 +1,127 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "oneTime",
+    "overwrite": false,
+    "_partials": []
+}
+**** END PROPERTIES SKAFFOLDER ****
+/* You can add global styles to this file, and also import other style files */
+
+$color_blue: #007BFF;
+$color_white: #ffffff;
+$color_orange: #ff6b35;
+
+$color_google_btn: #737373;
+$color_google_btn_active: #e5e5e5;
+
+/* GENERAL */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+/* FOOTER */
+
+.footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 40px;
+    padding: 12px 20px;
+    text-align: right;
+    background-color: $color_blue;
+    color: $color_white;
+    margin-top: 40px;
+
+    a,
+    a:active,
+    a:hover {
+        color: $color_orange;
+    }
+}
+
+/* MARGINS */
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mb-40 {
+    margin-bottom: 40px;
+}
+
+.mt-2 {
+    margin-top: 2px;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+.mt-40 {
+    margin-top: 40px;
+}
+
+.mr-2 {
+    margin-right: 2px;
+}
+
+/* LOGIN BUTTON */
+
+.login-btn-content {
+    background-color: $color_blue;
+    margin: -20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.google-button {
+    height: 40px;
+    border-width: 0;
+    background: $color_white;
+    color: $color_google_btn;
+    white-space: nowrap;
+    box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.05);
+    transition-property: background-color, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: ease-in-out;
+    padding: 0;
+    cursor: pointer;
+
+    &:focus,
+    &:hover {
+        box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        background-color: $color_google_btn_active;
+        box-shadow: none;
+        transition-duration: 10ms;
+    }
+}
+
+.google-button__icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 0px 8px 20px;
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+}
+
+.google-button__text {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Roboto', arial, sans-serif;
+}

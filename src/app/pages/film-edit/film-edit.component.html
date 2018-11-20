@@ -1,0 +1,81 @@
+<!-- TITLE -->
+<div class="mb-40 mt-40">
+    <h1>Film Edit</h1>
+</div>
+<div class="card mb-40">
+    <div class="card-header">
+        <i class="fa fa-edit"></i> Edit
+    </div>
+    <div class="card-body">
+        <form #editForm="ngForm" [ngClass]="{'was-validated': formValid!=null}">
+            <div class="row justify-content-md-center">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label for="genre">Genre</label>
+                        <select name="genre" id="genre" [(ngModel)]="item.genre" class="form-control" #genre="ngModel" >
+                            <option value=""></option>
+                            <option value="Action">Action</option>
+                            <option value="Crime">Crime</option>
+                            <option value="Fantasy">Fantasy</option>
+                            <option value="Horror">Horror</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" class="form-control" id="title" [(ngModel)]="item.title" name="title" #title="ngModel" required>
+                        <div class="invalid-feedback">Value is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <input type="number" class="form-control" id="year" [(ngModel)]="item.year" name="year" #year="ngModel" >
+                    </div>
+                    <!-- RELATIONS -->
+                    <h2 class="mb-20">Relations</h2>
+
+                    <div class="pb-30">
+                        <div class="mb-20">
+                            <label>Cast</label>
+
+                            <span class="dropdown ml-20">
+                                <button class="btn btn-dropdown dropdown-toggle" type="button" id="dropdownMenuButtoncast" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Add
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtoncast">
+                                    <button class="dropdown-item" *ngFor="let item of listCast" [class.disabled]="containActor(item.id)" (click)="$event.preventDefault(); containActor(item.id) || addActor(item.id)">{{item.id}}
+                                    </button>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="mb-40">
+                            <ul class="list-group">
+                                <li class="list-group-item" *ngIf="!item.cast || item.cast.length == 0">No item found</li>
+                                <li class="list-group-item" *ngFor="let obj of item.cast; let i = index">
+                                    {{obj}}
+
+                                    <button class="btn btn-danger pull-right" type="button" (click)="removeActor(i)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <label for="FilmMaker">FilmMaker</label>
+                    <select name="filmMaker" id="filmMaker" [(ngModel)]="item.filmMaker" class="form-control" #filmMaker="ngModel"  required>
+                        <option *ngFor="let item of listFilmMaker" [value]="item.id">{{item.id}}</option>
+                    </select>
+                        <div class="invalid-feedback">Value is required</div>
+
+                    
+        
+
+                    <!-- BUTTON BAR -->
+                    <div class="mt-40">
+                        <button class="btn btn-primary pull-right" (click)="save(editForm.valid)">Save</button>
+                        <button class="btn btn-secondary pull-right mr-2" (click)="goBack()">Back To List</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

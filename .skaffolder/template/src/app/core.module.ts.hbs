@@ -1,0 +1,42 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "oneTime",
+    "overwrite": false,
+    "_partials": [
+        {
+            "template": "// Do not edit this comment content, it will be overwritten in next Skaffolder generation\r\n{{#each resources}}\r\n{{#each _resources}}\r\nimport { {{capitalize name}}Service } from './services/{{toFileName name}}.service';\r\n{{/each}}\r\n{{/each}}",
+            "tagTo": "/* END MY SERVICES IMPORTS */",
+            "tagFrom": "/* START MY SERVICES IMPORTS */",
+            "name": "Partial Import Services"
+        },
+        {
+            "template": "// Do not edit this comment content, it will be overwritten in next Skaffolder generation\r\n{{#each resources}}\r\n{{#each _resources}}\r\n    {{capitalize name}}Service,\r\n{{/each}}\r\n{{/each}}",
+            "tagTo": "/* END PROVIDERS */",
+            "tagFrom": "/* START PROVIDERS */",
+            "name": "Partial Providers"
+        }
+    ]
+}
+**** END PROPERTIES SKAFFOLDER ****
+import { NgModule } from '@angular/core';
+
+/* START MY SERVICES IMPORTS */
+/* END MY SERVICES IMPORTS */
+
+import { AuthGuard } from './security/auth.guard';
+import { AuthenticationService } from './security/authentication.service';
+
+@NgModule({
+  imports: [],
+  providers: [
+    /* START PROVIDERS */
+    /* END PROVIDERS */
+
+    // SECURITY
+    AuthGuard,
+    AuthenticationService,
+  ],
+  exports: []
+})
+export class CoreModule {
+}

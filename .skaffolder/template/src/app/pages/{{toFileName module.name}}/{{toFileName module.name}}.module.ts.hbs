@@ -1,0 +1,26 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "module",
+    "_partials": []
+}
+**** END PROPERTIES SKAFFOLDER ****
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { {{capitalize module.name}}Component } from './{{toFileName module.name}}.component';
+import { {{capitalize module.name}}RoutingModule } from './{{toFileName module.name}}-routing.module';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+
+
+@NgModule({
+  imports: [
+    CommonModule,
+    {{capitalize module.name}}RoutingModule,
+    FormsModule,
+    SharedModule
+  ],
+  declarations: [
+    {{capitalize module.name}}Component
+  ]
+})
+export class {{capitalize module.name}}Module { }
